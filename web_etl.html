@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ETL Data Transfer Dashboard</title>
+    <link rel="stylesheet" href="web_etl.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔄</text></svg>"
+    />
+  </head>
+  <body class="light-theme">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-icon">
+            <i class="fas fa-database"></i>
+          </div>
+          <div class="logo-text">
+            <h2>ETL Dashboard</h2>
+            <span>Data Transfer</span>
+          </div>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <ul class="nav-menu">
+          <li class="nav-item active">
+            <a href="#dashboard" class="nav-link" data-section="dashboard">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#etl-config" class="nav-link" data-section="etl-config">
+              <i class="fas fa-cogs"></i>
+              <span>ETL Configuration</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#monitoring" class="nav-link" data-section="monitoring">
+              <i class="fas fa-chart-line"></i>
+              <span>Monitoring</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#history" class="nav-link" data-section="history">
+              <i class="fas fa-history"></i>
+              <span>History</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#settings" class="nav-link" data-section="settings">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="theme-toggle">
+          <button class="theme-btn" id="themeToggle">
+            <i class="fas fa-moon"></i>
+            <span>Dark Mode</span>
+          </button>
+        </div>
+        <div class="connection-status">
+          <div class="status-indicator" id="connectionStatus">
+            <i class="fas fa-circle"></i>
+            <span>Connected</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="breadcrumb">
+            <span class="breadcrumb-item active" id="currentSection"
+              >Dashboard</span
+            >
+          </div>
+        </div>
+
+        <div class="header-right">
+          <div class="header-actions">
+            <button class="action-btn" id="refreshBtn" title="Refresh">
+              <i class="fas fa-sync-alt"></i>
+            </button>
+            <button
+              class="action-btn"
+              id="notificationsBtn"
+              title="Notifications"
+            >
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge">3</span>
+            </button>
+            <button class="action-btn" id="helpBtn" title="Help">
+              <i class="fas fa-question-circle"></i>
+            </button>
+          </div>
+
+          <div class="user-profile">
+            <div class="user-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="user-info">
+              <span class="user-name">Admin User</span>
+              <span class="user-role">ETL Administrator</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Sections -->
+      <div class="content-wrapper">
+        <!-- Dashboard Section -->
+        <section class="content-section active" id="dashboard">
+          <div class="section-header">
+            <h1 class="section-title">ETL Dashboard</h1>
+            <p class="section-subtitle">
+              Giám sát quá trình chuyển đổi dữ liệu từ các hệ thống ERP sang
+              database DEV
+            </p>
+          </div>
+
+          <div class="dashboard-grid">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-icon success">
+                  <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                  <h3 class="stat-number" id="completedJobs">0</h3>
+                  <p class="stat-label">ETL Jobs Hoàn Thành</p>
+                  <div class="stat-trend positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>24h qua</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon warning">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                  <h3 class="stat-number" id="runningJobs">0</h3>
+                  <p class="stat-label">ETL Jobs Đang Chạy</p>
+                  <div class="stat-trend neutral">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span>Hiện tại</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon error">
+                  <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <div class="stat-content">
+                  <h3 class="stat-number" id="failedJobs">0</h3>
+                  <p class="stat-label">ETL Jobs Thất Bại</p>
+                  <div class="stat-trend negative">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Cần xem xét</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon info">
+                  <i class="fas fa-database"></i>
+                </div>
+                <div class="stat-content">
+                  <h3 class="stat-number" id="totalRecords">0</h3>
+                  <p class="stat-label">Tổng Records Trong DEV</p>
+                  <div class="stat-trend positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>Từ 5 ERP</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="activity-panel">
+              <div class="panel-header">
+                <h3><i class="fas fa-history"></i> Hoạt Động ETL Gần Đây</h3>
+                <button
+                  class="panel-action"
+                  onclick="dashboard.switchSection('history')"
+                >
+                  Xem Tất Cả
+                </button>
+              </div>
+              <div class="activity-list" id="activityList">
+                <!-- Activity items will be populated here -->
+              </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+              <div class="panel-header">
+                <h3><i class="fas fa-bolt"></i> Thao Tác Nhanh</h3>
+              </div>
+              <div class="actions-grid">
+                <button
+                  class="quick-action-btn"
+                  data-action="new-etl"
+                  onclick="dashboard.switchSection('etl-config')"
+                >
+                  <i class="fas fa-plus"></i>
+                  <span>Tạo ETL Job Mới</span>
+                </button>
+                <button
+                  class="quick-action-btn"
+                  data-action="view-logs"
+                  onclick="dashboard.switchSection('monitoring')"
+                >
+                  <i class="fas fa-terminal"></i>
+                  <span>Xem Logs</span>
+                </button>
+                <button
+                  class="quick-action-btn"
+                  data-action="system-health"
+                  onclick="dashboard.checkServerConnection()"
+                >
+                  <i class="fas fa-heartbeat"></i>
+                  <span>Kiểm Tra Hệ Thống</span>
+                </button>
+                <button
+                  class="quick-action-btn"
+                  data-action="refresh-stats"
+                  onclick="dashboard.loadDashboardData()"
+                >
+                  <i class="fas fa-sync-alt"></i>
+                  <span>Làm Mới Dữ Liệu</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ETL Configuration Section -->
+        <section class="content-section" id="etl-config">
+          <div class="section-header">
+            <h1 class="section-title">Cấu Hình ETL</h1>
+            <p class="section-subtitle">
+              Cấu hình và thực thi các job chuyển đổi dữ liệu từ ERP sang DEV
+            </p>
+          </div>
+
+          <div class="config-layout">
+            <div class="config-form-panel">
+              <div class="panel-header">
+                <h3><i class="fas fa-sliders-h"></i> Cấu Hình Job</h3>
+                <div class="form-tabs">
+                  <button class="tab-btn active" data-tab="basic">
+                    Cơ Bản
+                  </button>
+                  <button class="tab-btn" data-tab="advanced">Nâng Cao</button>
+                  <button class="tab-btn" data-tab="schedule">
+                    Lịch Trình
+                  </button>
+                </div>
+              </div>
+
+              <form id="etlForm" class="etl-form">
+                <!-- Basic Tab -->
+                <div class="tab-content active" id="basic-tab">
+                  <div class="form-section">
+                    <h4>
+                      <i class="fas fa-database"></i> Cấu Hình Nguồn Dữ Liệu
+                    </h4>
+                    <div class="form-grid">
+                      <div class="form-group">
+                        <label for="sourceTable">
+                          <i class="fas fa-table"></i>
+                          Bảng Nguồn (ERP)
+                        </label>
+                        <div class="input-wrapper">
+                          <input
+                            type="text"
+                            id="sourceTable"
+                            name="sourceTable"
+                            placeholder="Nhập tên bảng nguồn (ví dụ: ir_model_data)"
+                            required
+                          />
+                          <div class="input-icon">
+                            <i class="fas fa-search"></i>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="targetTable">
+                          <i class="fas fa-target"></i>
+                          Bảng Đích (DEV)
+                        </label>
+                        <div class="input-wrapper">
+                          <input
+                            type="text"
+                            id="targetTable"
+                            name="targetTable"
+                            placeholder="Nhập tên bảng đích (ví dụ: ir_model_data_new)"
+                            required
+                          />
+                          <div class="input-icon">
+                            <i class="fas fa-bullseye"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="whereClause">
+                        <i class="fas fa-filter"></i>
+                        Điều Kiện Lọc (WHERE Clause)
+                      </label>
+                      <div class="textarea-wrapper">
+                        <textarea
+                          id="whereClause"
+                          name="whereClause"
+                          rows="4"
+                          placeholder="Nhập điều kiện SQL WHERE (tùy chọn)"
+                        ></textarea>
+                        <div class="textarea-icon">
+                          <i class="fas fa-code"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-section">
+                    <h4><i class="fas fa-server"></i> Nguồn ERP</h4>
+                    <div class="sources-grid">
+                      <div class="source-card">
+                        <label class="source-item">
+                          <input
+                            type="checkbox"
+                            name="sources"
+                            value="old"
+                            checked
+                          />
+                          <div class="source-content">
+                            <div class="source-icon old">
+                              <i class="fas fa-archive"></i>
+                            </div>
+                            <div class="source-info">
+                              <span class="source-name">OLD ERP</span>
+                              <span class="source-detail">Legacy System</span>
+                              <span class="source-status online">Online</span>
+                            </div>
+                          </div>
+                        </label>
+                      </div>
+
+                      <div class="source-card">
+                        <label class="source-item">
+                          <input
+                            type="checkbox"
+                            name="sources"
+                            value="kn"
+                            checked
+                          />
+                          <div class="source-content">
+                            <div class="source-icon kn">
+                              <i class="fas fa-building"></i>
+                            </div>
+                            <div class="source-info">
+                              <span class="source-name">KN ERP</span>
+                              <span class="source-detail">Manufacturing</span>
+                              <span class="source-status online">Online</span>
+                            </div>
+                          </div>
+                        </label>
+                      </div>
+
+                      <div class="source-card">
+                        <label class="source-item">
+                          <input
+                            type="checkbox"
+                            name="sources"
+                            value="pr"
+                            checked
+                          />
+                          <div class="source-content">
+                            <div class="source-icon pr">
+                              <i class="fas fa-industry"></i>
+                            </div>
+                            <div class="source-info">
+                              <span class="source-name">PR ERP</span>
+                              <span class="source-detail">Production</span>
+                              <span class="source-status online">Online</span>
+                            </div>
+                          </div>
+                        </label>
+                      </div>
+
+                      <div class="source-card">
+                        <label class="source-item">
+                          <input
+                            type="checkbox"
+                            name="sources"
+                            value="hh"
+                            checked
+                          />
+                          <div class="source-content">
+                            <div class="source-icon hh">
+                              <i class="fas fa-home"></i>
+                            </div>
+                            <div class="source-info">
+                              <span class="source-name">HH ERP</span>
+                              <span class="source-detail">Household</span>
+                              <span class="source-status online">Online</span>
+                            </div>
+                          </div>
+                        </label>
+                      </div>
+
+                      <div class="source-card">
+                        <label class="source-item">
+                          <input
+                            type="checkbox"
+                            name="sources"
+                            value="sci"
+                            checked
+                          />
+                          <div class="source-content">
+                            <div class="source-icon sci">
+                              <i class="fas fa-flask"></i>
+                            </div>
+                            <div class="source-info">
+                              <span class="source-name">SCI ERP</span>
+                              <span class="source-detail">Scientific</span>
+                              <span class="source-status online">Online</span>
+                            </div>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Advanced Tab -->
+                <div class="tab-content" id="advanced-tab">
+                  <div class="form-section">
+                    <h4><i class="fas fa-cogs"></i> Performance Settings</h4>
+                    <div class="form-grid">
+                      <div class="form-group">
+                        <label for="batchSize">
+                          <i class="fas fa-layer-group"></i>
+                          Batch Size
+                        </label>
+                        <div class="input-wrapper">
+                          <input
+                            type="number"
+                            id="batchSize"
+                            name="batchSize"
+                            value="5000"
+                            min="1000"
+                            max="10000"
+                          />
+                          <div class="input-icon">
+                            <i class="fas fa-calculator"></i>
+                          </div>
+                        </div>
+                        <div class="input-hint">
+                          Records per batch (1000-10000)
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="timeout">
+                          <i class="fas fa-clock"></i>
+                          Timeout (minutes)
+                        </label>
+                        <div class="input-wrapper">
+                          <input
+                            type="number"
+                            id="timeout"
+                            name="timeout"
+                            value="30"
+                            min="5"
+                            max="120"
+                          />
+                          <div class="input-icon">
+                            <i class="fas fa-hourglass-half"></i>
+                          </div>
+                        </div>
+                        <div class="input-hint">Maximum execution time</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-section">
+                    <h4><i class="fas fa-shield-alt"></i> Safety Settings</h4>
+                    <div class="form-group">
+                      <label class="checkbox-label">
+                        <input type="checkbox" name="backupBefore" checked />
+                        <span class="checkmark"></span>
+                        <span class="label-text"
+                          >Create backup before transfer</span
+                        >
+                      </label>
+                    </div>
+                    <div class="form-group">
+                      <label class="checkbox-label">
+                        <input type="checkbox" name="validateData" checked />
+                        <span class="checkmark"></span>
+                        <span class="label-text">Validate data integrity</span>
+                      </label>
+                    </div>
+                    <div class="form-group">
+                      <label class="checkbox-label">
+                        <input type="checkbox" name="notifyOnComplete" />
+                        <span class="checkmark"></span>
+                        <span class="label-text"
+                          >Send notification on completion</span
+                        >
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Schedule Tab -->
+                <div class="tab-content" id="schedule-tab">
+                  <div class="form-section">
+                    <h4>
+                      <i class="fas fa-calendar-alt"></i> Scheduling Options
+                    </h4>
+                    <div class="form-group">
+                      <label class="radio-label">
+                        <input
+                          type="radio"
+                          name="executionMode"
+                          value="immediate"
+                          checked
+                        />
+                        <span class="radio-mark"></span>
+                        <span class="label-text">Execute immediately</span>
+                      </label>
+                    </div>
+                    <div class="form-group">
+                      <label class="radio-label">
+                        <input
+                          type="radio"
+                          name="executionMode"
+                          value="scheduled"
+                        />
+                        <span class="radio-mark"></span>
+                        <span class="label-text">Schedule for later</span>
+                      </label>
+                    </div>
+                    <div class="form-group">
+                      <label class="radio-label">
+                        <input
+                          type="radio"
+                          name="executionMode"
+                          value="recurring"
+                        />
+                        <span class="radio-mark"></span>
+                        <span class="label-text">Set up recurring job</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="resetForm()"
+                  >
+                    <i class="fas fa-undo"></i>
+                    <span>Đặt Lại</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline"
+                    onclick="validateConfig()"
+                  >
+                    <i class="fas fa-check"></i>
+                    <span>Kiểm Tra</span>
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    <span>Bắt Đầu ETL</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Job Preview Panel -->
+            <div class="job-preview-panel">
+              <div class="panel-header">
+                <h3><i class="fas fa-eye"></i> Job Preview</h3>
+                <button class="panel-action" id="refreshPreview">
+                  Refresh
+                </button>
+              </div>
+              <div class="preview-content" id="jobPreview">
+                <div class="preview-placeholder">
+                  <i class="fas fa-eye-slash"></i>
+                  <p>Configure your ETL job to see preview</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Monitoring Section -->
+        <section class="content-section" id="monitoring">
+          <div class="section-header">
+            <h1 class="section-title">Giám Sát Thời Gian Thực</h1>
+            <p class="section-subtitle">
+              Giám sát các ETL jobs đang chạy và hiệu suất hệ thống
+            </p>
+          </div>
+
+          <div class="monitoring-grid">
+            <!-- Active Jobs -->
+            <div class="active-jobs-panel">
+              <div class="panel-header">
+                <h3><i class="fas fa-tasks"></i> Active Jobs</h3>
+                <div class="panel-actions">
+                  <button class="action-btn" id="pauseAllJobs">
+                    Pause All
+                  </button>
+                  <button class="action-btn" id="stopAllJobs">Stop All</button>
+                </div>
+              </div>
+              <div class="jobs-list" id="activeJobsList">
+                <!-- Active jobs will be populated here -->
+              </div>
+            </div>
+
+            <!-- Progress Visualization -->
+            <div class="progress-panel">
+              <div class="panel-header">
+                <h3><i class="fas fa-chart-line"></i> Job Progress</h3>
+                <select class="job-selector" id="jobSelector">
+                  <option value="">Select a job to monitor</option>
+                </select>
+              </div>
+              <div class="progress-content" id="progressContent">
+                <div class="progress-placeholder">
+                  <i class="fas fa-chart-line"></i>
+                  <p>Select a job to view progress</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- System Metrics -->
+            <div class="metrics-panel">
+              <div class="panel-header">
+                <h3><i class="fas fa-server"></i> System Metrics</h3>
+                <button class="action-btn" id="refreshMetrics">Refresh</button>
+              </div>
+              <div class="metrics-grid" id="systemMetrics">
+                <!-- Metrics will be populated here -->
+              </div>
+            </div>
+
+            <!-- Data Statistics -->
+            <div class="data-stats-panel">
+              <div class="panel-header">
+                <h3><i class="fas fa-chart-pie"></i> Thống Kê Dữ Liệu</h3>
+                <button class="action-btn" id="refreshStats">Làm Mới</button>
+              </div>
+              <div class="stats-content">
+                <div class="stats-tabs">
+                  <button class="stats-tab-btn active" data-stats-tab="brands">
+                    Theo Brand
+                  </button>
+                  <button class="stats-tab-btn" data-stats-tab="tables">
+                    Theo Bảng
+                  </button>
+                </div>
+                <div class="stats-tab-content active" id="brands-stats">
+                  <div class="brand-stats-grid" id="brandStatsGrid">
+                    <!-- Brand statistics will be populated here -->
+                  </div>
+                </div>
+                <div class="stats-tab-content" id="tables-stats">
+                  <div class="table-stats-grid" id="tableStatsGrid">
+                    <!-- Table statistics will be populated here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Logs -->
+            <div class="logs-panel">
+              <div class="panel-header">
+                <h3><i class="fas fa-terminal"></i> Live Logs</h3>
+                <div class="panel-actions">
+                  <button class="action-btn" id="clearLogs">Clear</button>
+                  <button class="action-btn" id="downloadLogs">Download</button>
+                  <div class="log-level-filter">
+                    <select id="logLevelFilter">
+                      <option value="all">All Levels</option>
+                      <option value="info">Info</option>
+                      <option value="warning">Warning</option>
+                      <option value="error">Error</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="logs-content" id="liveLogs">
+                <!-- Live logs will be populated here -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- History Section -->
+        <section class="content-section" id="history">
+          <div class="section-header">
+            <h1 class="section-title">Job History</h1>
+            <p class="section-subtitle">View and analyze completed ETL jobs</p>
+          </div>
+
+          <div class="history-layout">
+            <!-- Filters -->
+            <div class="history-filters">
+              <div class="filter-group">
+                <label>Date Range</label>
+                <div class="date-range">
+                  <input type="date" id="startDate" />
+                  <span>to</span>
+                  <input type="date" id="endDate" />
+                </div>
+              </div>
+              <div class="filter-group">
+                <label>Status</label>
+                <select id="statusFilter">
+                  <option value="">All Status</option>
+                  <option value="completed">Completed</option>
+                  <option value="failed">Failed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+              </div>
+              <div class="filter-group">
+                <label>Source</label>
+                <select id="sourceFilter">
+                  <option value="">All Sources</option>
+                  <option value="old">OLD ERP</option>
+                  <option value="kn">KN ERP</option>
+                  <option value="pr">PR ERP</option>
+                  <option value="hh">HH ERP</option>
+                  <option value="sci">SCI ERP</option>
+                </select>
+              </div>
+              <button class="btn btn-primary" id="applyFilters">
+                Apply Filters
+              </button>
+            </div>
+
+            <!-- History Table -->
+            <div class="history-table-panel">
+              <div class="panel-header">
+                <h3><i class="fas fa-table"></i> Job History</h3>
+                <div class="panel-actions">
+                  <button class="action-btn" id="exportHistory">Export</button>
+                  <button class="action-btn" id="refreshHistory">
+                    Refresh
+                  </button>
+                </div>
+              </div>
+              <div class="table-container">
+                <table class="history-table" id="historyTable">
+                  <thead>
+                    <tr>
+                      <th>Job ID</th>
+                      <th>Source Table</th>
+                      <th>Target Table</th>
+                      <th>Status</th>
+                      <th>Duration</th>
+                      <th>Records</th>
+                      <th>Started</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="historyTableBody">
+                    <!-- History rows will be populated here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section class="content-section" id="settings">
+          <div class="section-header">
+            <h1 class="section-title">Settings</h1>
+            <p class="section-subtitle">
+              Configure system settings and preferences
+            </p>
+          </div>
+
+          <div class="settings-layout">
+            <div class="settings-nav">
+              <ul class="settings-menu">
+                <li class="settings-item active">
+                  <a href="#general" data-settings-tab="general">
+                    <i class="fas fa-cog"></i>
+                    <span>General</span>
+                  </a>
+                </li>
+                <li class="settings-item">
+                  <a href="#database" data-settings-tab="database">
+                    <i class="fas fa-database"></i>
+                    <span>Database</span>
+                  </a>
+                </li>
+                <li class="settings-item">
+                  <a href="#notifications" data-settings-tab="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                  </a>
+                </li>
+                <li class="settings-item">
+                  <a href="#security" data-settings-tab="security">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Security</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="settings-content">
+              <!-- General Settings -->
+              <div class="settings-tab active" id="general-settings">
+                <h3>General Settings</h3>
+                <div class="settings-group">
+                  <div class="setting-item">
+                    <label>Default Batch Size</label>
+                    <input type="number" value="5000" min="1000" max="10000" />
+                  </div>
+                  <div class="setting-item">
+                    <label>Default Timeout (minutes)</label>
+                    <input type="number" value="30" min="5" max="120" />
+                  </div>
+                  <div class="setting-item">
+                    <label>Auto-refresh interval (seconds)</label>
+                    <input type="number" value="5" min="1" max="60" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Database Settings -->
+              <div class="settings-tab" id="database-settings">
+                <h3>Database Settings</h3>
+                <div class="settings-group">
+                  <div class="setting-item">
+                    <label>Connection Pool Size</label>
+                    <input type="number" value="10" min="1" max="50" />
+                  </div>
+                  <div class="setting-item">
+                    <label>Query Timeout (seconds)</label>
+                    <input type="number" value="300" min="30" max="3600" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Notification Settings -->
+              <div class="settings-tab" id="notifications-settings">
+                <h3>Notification Settings</h3>
+                <div class="settings-group">
+                  <div class="setting-item">
+                    <label class="checkbox-label">
+                      <input type="checkbox" checked />
+                      <span class="checkmark"></span>
+                      <span class="label-text">Email notifications</span>
+                    </label>
+                  </div>
+                  <div class="setting-item">
+                    <label class="checkbox-label">
+                      <input type="checkbox" />
+                      <span class="checkmark"></span>
+                      <span class="label-text">Desktop notifications</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Security Settings -->
+              <div class="settings-tab" id="security-settings">
+                <h3>Security Settings</h3>
+                <div class="settings-group">
+                  <div class="setting-item">
+                    <label>Session Timeout (minutes)</label>
+                    <input type="number" value="60" min="5" max="480" />
+                  </div>
+                  <div class="setting-item">
+                    <label class="checkbox-label">
+                      <input type="checkbox" checked />
+                      <span class="checkmark"></span>
+                      <span class="label-text"
+                        >Require password for sensitive operations</span
+                      >
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="settings-actions">
+                <button class="btn btn-secondary">Reset to Defaults</button>
+                <button class="btn btn-primary">Save Settings</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none">
+      <div class="loading-content">
+        <div class="loading-spinner">
+          <div class="spinner-ring"></div>
+          <div class="spinner-ring"></div>
+          <div class="spinner-ring"></div>
+        </div>
+        <div class="loading-text">Processing...</div>
+        <div class="loading-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="loadingProgress"></div>
+          </div>
+          <span class="progress-text" id="loadingProgressText">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Modal Dialog -->
+    <div class="modal-overlay" id="modalOverlay" style="display: none">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modalTitle">Modal Title</h3>
+          <button class="modal-close" id="modalClose">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <!-- Modal content will be populated here -->
+        </div>
+        <div class="modal-footer" id="modalFooter">
+          <!-- Modal actions will be populated here -->
+        </div>
+      </div>
+    </div>
+
+    <script src="web_etl.js"></script>
+    <script>
+      // Add additional methods to ETLDashboard prototype
+      ETLDashboard.prototype.switchStatsTab = function (tab) {
+        this.statsTabBtns.forEach((btn) => btn.classList.remove("active"));
+        this.statsTabContents.forEach((content) =>
+          content.classList.remove("active")
+        );
+        document
+          .querySelector(`[data-stats-tab="${tab}"]`)
+          .classList.add("active");
+        document.getElementById(`${tab}-stats`).classList.add("active");
+        if (tab === "brands") this.loadBrandStats();
+        else if (tab === "tables") this.loadTableStats();
+      };
+
+      ETLDashboard.prototype.loadBrandStats = function () {
+        if (
+          !this.dashboardStats ||
+          !this.dashboardStats.brand_stats ||
+          !this.brandStatsGrid
+        )
+          return;
+        this.brandStatsGrid.innerHTML = "";
+        this.dashboardStats.brand_stats.forEach((brand) => {
+          const brandCard = document.createElement("div");
+          brandCard.className = "brand-stat-card";
+          const brandMap = { 0: "old", 1: "kn", 3: "pr", 4: "hh", 7: "sci" };
+          const iconMap = {
+            0: "fas fa-archive",
+            1: "fas fa-building",
+            3: "fas fa-industry",
+            4: "fas fa-home",
+            7: "fas fa-flask",
+          };
+          brandCard.innerHTML = `
+            <div class="brand-stat-header">
+              <div class="brand-stat-icon ${
+                brandMap[brand.brand_etl] || "unknown"
+              }">
+                <i class="${iconMap[brand.brand_etl] || "fas fa-question"}"></i>
+              </div>
+              <div class="brand-stat-name">${brand.brand_name}</div>
+            </div>
+            <div class="brand-stat-count">${brand.record_count.toLocaleString()}</div>
+            <div class="brand-stat-detail">Records</div>
+          `;
+          this.brandStatsGrid.appendChild(brandCard);
+        });
+      };
+
+      ETLDashboard.prototype.loadTableStats = function () {
+        if (
+          !this.dashboardStats ||
+          !this.dashboardStats.table_stats ||
+          !this.tableStatsGrid
+        )
+          return;
+        this.tableStatsGrid.innerHTML = "";
+        this.dashboardStats.table_stats.forEach((table) => {
+          const tableCard = document.createElement("div");
+          tableCard.className = "table-stat-card";
+          tableCard.innerHTML = `
+            <div class="table-stat-header">
+              <div class="table-stat-icon">
+                <i class="fas fa-table"></i>
+              </div>
+              <div class="table-stat-name">${table.table_name}</div>
+            </div>
+            <div class="table-stat-count">${table.record_count.toLocaleString()}</div>
+            <div class="table-stat-detail">${table.brand_count} brands</div>
+          `;
+          this.tableStatsGrid.appendChild(tableCard);
+        });
+      };
+
+      ETLDashboard.prototype.refreshStats = async function () {
+        try {
+          await this.loadDashboardData();
+          this.showToast(
+            "success",
+            "Thành công",
+            "Đã làm mới dữ liệu thống kê"
+          );
+        } catch (error) {
+          this.showToast(
+            "error",
+            "Lỗi",
+            "Không thể làm mới dữ liệu: " + error.message
+          );
+        }
+      };
+    </script>
+  </body>
+</html>
