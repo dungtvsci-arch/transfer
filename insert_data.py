@@ -1,9 +1,9 @@
 import pandas as pd
-import psycopg2
-from psycopg2 import sql
+import psycopg
+from psycopg import sql
 from connect_database import connect_db_dev, connect_db_erp_kn, connect_db_erp_pr, connect_db_erp_hh, connect_db_erp_old, connect_db_erp_sci
 import os
-from psycopg2.extras import execute_values
+from psycopg.extras import execute_values
 import numpy as np
 
 # Hàm kết nối đến database DEV
