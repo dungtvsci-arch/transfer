@@ -1,9 +1,9 @@
-import psycopg2
+import psycopg
 
 # Kết nối tới database dev
 def connect_db_dev():
     try:
-        connection = psycopg2.connect(
+        connection = psycopg.connect(
             host="10.10.10.224",
             database="dev_staging_sci", 
             user="views_staging_sci",
@@ -11,14 +11,14 @@ def connect_db_dev():
             port="5432"
         )
         return connection 
-    except (Exception, psycopg2.Error) as error:
+    except (Exception, psycopg.Error) as error:
         print("Lỗi khi kết nối đến Database Dev:", error)
         return None
 
 # Kết nối tới database ERP_OLD
 def connect_db_erp_old():
     try:
-        connection = psycopg2.connect(
+        connection = psycopg.connect(
             host="10.10.10.154",
             database="sci_erp",
             user="reporter",
@@ -26,7 +26,7 @@ def connect_db_erp_old():
             port="5432"
         )
         return connection
-    except (Exception, psycopg2.Error) as error:
+    except (Exception, psycopg.Error) as error:
         print("Lỗi khi kết nối đến Database ERP:", error)
         return None
 
@@ -34,7 +34,7 @@ def connect_db_erp_old():
 # Kết nối tới database ERP HH
 def connect_db_erp_hh():
     try:
-        connection = psycopg2.connect(
+        connection = psycopg.connect(
             host="10.10.10.218",
             database="hh_erp",
             user="reporter",
@@ -42,14 +42,14 @@ def connect_db_erp_hh():
             port="54321"
         )
         return connection
-    except (Exception, psycopg2.Error) as error:
+    except (Exception, psycopg.Error) as error:
         print("Lỗi khi kết nối đến Database ERP HH:", error)
         return None
 
 # Kết nối tới database ERP KN
 def connect_db_erp_kn():
     try:
-        connection = psycopg2.connect(
+        connection = psycopg.connect(
             host="10.10.10.211",
             database="kn_erp",
             user="reporter",
@@ -57,14 +57,14 @@ def connect_db_erp_kn():
             port="54321"
         )
         return connection
-    except (Exception, psycopg2.Error) as error:
+    except (Exception, psycopg.Error) as error:
         print("Lỗi khi kết nối đến Database ERP KN:", error)
         return None
 
 # Kết nối tới database ERP PR
 def connect_db_erp_pr():
     try:
-        connection = psycopg2.connect(
+        connection = psycopg.connect(
             host="10.10.10.137",
             database="pr_erp",
             user="reporter",
@@ -72,14 +72,14 @@ def connect_db_erp_pr():
             port="54321"
         )
         return connection
-    except (Exception, psycopg2.Error) as error:
+    except (Exception, psycopg.Error) as error:
         print("Lỗi khi kết nối đến Database ERP PR:", error)
         return None
 
 # Kết nối tới database ERP SCI
 def connect_db_erp_sci():
     try:
-        connection = psycopg2.connect(
+        connection = psycopg.connect(
             host="10.10.10.154",
             database="sci_erp",
             user="reporter",
@@ -87,7 +87,7 @@ def connect_db_erp_sci():
             port="54321"
         )
         return connection
-    except (Exception, psycopg2.Error) as error:
+    except (Exception, psycopg.Error) as error:
         print("Lỗi khi kết nối đến Database ERP SCI:", error)
         return None
 
