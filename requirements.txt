@@ -4,3 +4,4 @@ pandas>=2.2.3
 psycopg2-binary==2.9.9
 numpy==1.26.2
 Werkzeug==3.0.1
+gunicorn==22.0.0
