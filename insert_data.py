@@ -3,7 +3,23 @@ import psycopg
 from psycopg import sql
 from connect_database import connect_db_dev, connect_db_erp_kn, connect_db_erp_pr, connect_db_erp_hh, connect_db_erp_old, connect_db_erp_sci
 import os
-from psycopg.extras import execute_values
+try:
+    from psycopg.extras import execute_values as _execute_values_native
+    def execute_values(cursor, query_str, rows, page_size=1000):
+        return _execute_values_native(cursor, query_str, rows, page_size=page_size)
+except Exception:
+    # Fallback cho môi trường không có psycopg.extras: dùng executemany (ít tối ưu hơn)
+    def execute_values(cursor, query_str, rows, page_size=1000):
+        if not rows:
+            return
+        num_cols = len(rows[0])
+        values_placeholder = "(" + ", ".join(["%s"] * num_cols) + ")"
+        if "VALUES %s" in query_str:
+            query_em = query_str.replace("VALUES %s", f"VALUES {values_placeholder}")
+        else:
+            # Nếu định dạng khác thường, cố gắng nối thêm phần VALUES
+            query_em = query_str + f" VALUES {values_placeholder}"
+        cursor.executemany(query_em, rows)
 import numpy as np
 
 # Hàm kết nối đến database DEV

@@ -29,6 +29,27 @@ CORS(app)
 # Store cho ETL processes
 etl_processes = {}
 
+# Khởi tạo bảng 1 lần an toàn luồng cho Flask 3 (thay thế before_first_request)
+_init_lock = threading.Lock()
+_initialized = False
+
+@app.before_request
+def _ensure_initialized_once():
+    global _initialized
+    if not _initialized:
+        with _init_lock:
+            if not _initialized:
+                try:
+                    created = create_etl_processes_table()
+                    if created:
+                        print("✓ etl_processes ready (first request)")
+                    else:
+                        print("⚠️ Không thể đảm bảo bảng etl_processes sẵn sàng")
+                except Exception as e:
+                    print(f"Lỗi init lần đầu: {e}")
+                finally:
+                    _initialized = True
+
 def create_etl_processes_table():
     """Tạo bảng etl_processes trong DEV database để lưu lịch sử"""
     try:

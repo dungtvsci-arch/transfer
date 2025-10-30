@@ -21,7 +21,7 @@ def _connect_with_env(url_key, host_key, db_key, user_key, pass_key, port_key, d
         user = os.getenv(user_key, default_params.get("user"))
         password = os.getenv(pass_key, default_params.get("password"))
         port = os.getenv(port_key, default_params.get("port", "5432"))
-        return psycopg.connect(host=host, database=database, user=user, password=password, port=port)
+        return psycopg.connect(host=host, dbname=database, user=user, password=password, port=port)
     except (Exception, psycopg.Error) as error:
         print(f"Lỗi khi kết nối đến Database ({db_key}):", error)
         return None
