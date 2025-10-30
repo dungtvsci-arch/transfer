@@ -1,17 +1,7 @@
-# Exported from Render on 2025-10-30T01:08:41Z
-version: "1"
-projects:
-  - name: My project
-    environments:
-      - name: Production
-        services:
-          - type: web
-            name: transfer
-            runtime: python
-            repo: https://github.com/dungtvsci-arch/transfer
-            plan: free
-            region: oregon
-            buildCommand: pip install -r requirements.txt
-            startCommand: gunicorn flask_etl_server:app
-            autoDeployTrigger: commit
-            pythonVersion: 3.11.9
+services:
+  - type: web
+    name: etl-transfer
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn flask_etl_server:app
